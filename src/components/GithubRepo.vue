@@ -14,6 +14,7 @@
 
 <script>
 import { deboucerDecorator } from "@/helpers/deboucer";
+import { api } from "@/api/api";
 
 export default {
   name: "GithubRepo",
@@ -31,12 +32,10 @@ export default {
       console.log(this.searchUser);
       this.userLoading = true;
 
-      fetch(`https://api.github.com/search/users?q=${this.searchUser}`)
-        .then((response) => response.json())
-        .then((data) => {
-          this.userList = data.items;
-          this.userLoading = false;
-        });
+      api.getUsers(this.searchUser).then((data) => {
+        this.userList = data.items;
+        this.userLoading = false;
+      });
     }, 500),
   },
 
