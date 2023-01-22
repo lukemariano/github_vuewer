@@ -8,6 +8,7 @@
       :search-input.sync="searchUser"
       item-text="login"
     ></v-autocomplete>
+    <div><v-btn>Buscar</v-btn></div>
   </div>
 </template>
 
@@ -29,11 +30,13 @@ export default {
       // arrow function não passa o 'this' corretamente
       console.log(this.searchUser);
       this.userLoading = true;
-      setTimeout(() => {
-        this.userList = [{ login: "lucas" }, { login: "prata" }];
 
-        this.userLoading = false;
-      }, 1000);
+      fetch(`https://api.github.com/search/users?q=${this.searchUser}`)
+        .then((response) => response.json())
+        .then((data) => {
+          this.userList = data.items;
+          this.userLoading = false;
+        });
     }, 500),
   },
 
