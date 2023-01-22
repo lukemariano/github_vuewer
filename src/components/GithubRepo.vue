@@ -27,15 +27,14 @@ export default {
   }),
 
   methods: {
-    getGithubUser: deboucerDecorator(function () {
+    getGithubUser: deboucerDecorator(async function () {
       // arrow function não passa o 'this' corretamente
       console.log(this.searchUser);
       this.userLoading = true;
 
-      api.getUsers(this.searchUser).then((data) => {
-        this.userList = data.items;
-        this.userLoading = false;
-      });
+      const data = await api.getUsers(this.searchUser);
+      this.userList = data.items;
+      this.userLoading = false;
     }, 500),
   },
 
