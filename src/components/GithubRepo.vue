@@ -77,6 +77,10 @@ export default {
         this.getRepository();
       }
     },
+
+    repo() {
+      this.$emit("repoSelected", this.repo);
+    },
   },
 };
 </script>
