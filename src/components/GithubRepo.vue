@@ -1,14 +1,29 @@
 <template>
   <div>
-    <h1>Hello app!</h1>
-    <v-autocomplete
-      v-model="user"
-      :items="userList"
-      :loading="userLoading"
-      :search-input.sync="searchUser"
-      item-text="login"
-    ></v-autocomplete>
-    <div><v-btn>Buscar</v-btn></div>
+    <h1>Find Your Repository:</h1>
+    <v-row class="text-center">
+      <v-col cols="6">
+        <v-autocomplete
+          v-model="user"
+          :items="userList"
+          :loading="userLoading"
+          :search-input.sync="searchUser"
+          item-text="login"
+          label="Find GitHub User"
+        ></v-autocomplete>
+      </v-col>
+      <v-col cols="6">
+        <v-select
+          v-model="repo"
+          :items="repoList"
+          :loading="repoLoading"
+          item-text="name"
+          label="Select Repository"
+          return-object
+          single-line
+        ></v-select>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -21,8 +36,11 @@ export default {
 
   data: () => ({
     user: null,
+    repo: null,
     searchUser: null,
+    repoList: [],
     userList: [],
+    repoLoading: false,
     userLoading: false,
   }),
 
@@ -36,6 +54,14 @@ export default {
       this.userList = data.items;
       this.userLoading = false;
     }, 500),
+
+    async getRepository() {
+      this.repoLoading = true;
+      const data = await api.getRepos(this.user);
+      this.repoList = data;
+
+      this.repoLoading = false;
+    },
   },
 
   watch: {
@@ -44,6 +70,10 @@ export default {
       // se eu ficar digitando ele fica chamando e ela fica aguardando os 500 milisegundos
       // Ou seja, só chama a função de search se eu parar de digitar
       this.getGithubUser();
+    },
+
+    user() {
+      this.getRepository();
     },
   },
 };
