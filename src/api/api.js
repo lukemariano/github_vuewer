@@ -24,13 +24,16 @@ export const api = {
     );
     return await response.json();
   },
-
   // pesquisa repo:  https://api.github.com/users/USERNAME/repos
-
   async getRepos(username) {
     const url = `https://api.github.com/users/${username}/repos`;
     const data = await fetch_all_pages(url);
 
     return data;
+  },
+  async getIssues(owner, reponame, page) {
+    const url = `https://api.github.com/repos/${owner}/${reponame}/issues?page=${page}`;
+    const response = await fetch(url);
+    return await response.json();
   },
 };
