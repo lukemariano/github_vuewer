@@ -29,7 +29,7 @@
 
 <script>
 import { deboucerDecorator } from "@/helpers/deboucer";
-import { api } from "@/api/api";
+import { api } from "~api";
 
 export default {
   name: "GithubRepo",
