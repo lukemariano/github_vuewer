@@ -73,7 +73,9 @@ export default {
     },
 
     user() {
-      this.getRepository();
+      if (this.user) {
+        this.getRepository();
+      }
     },
   },
 };

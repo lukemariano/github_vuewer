@@ -1,22 +1,36 @@
+async function fetch_all_pages(url) {
+  let haveResult = true;
+  let result = [];
+  let page = 1;
+
+  while (haveResult) {
+    const response = await fetch(`${url}?page=${page}`);
+    const tmpItems = await response.json();
+    if (tmpItems.length > 0) {
+      result = result.concat(tmpItems);
+      page++;
+    } else {
+      haveResult = false;
+    }
+  }
+
+  return result;
+}
+
 export const api = {
   async getUsers(searchString) {
-    const result = await fetch(
+    const response = await fetch(
       `https://api.github.com/search/users?q=${searchString}`
     );
-    return await result.json();
+    return await response.json();
   },
 
   // pesquisa repo:  https://api.github.com/users/USERNAME/repos
 
-  async getRepos(username, page) {
-    if (!page) {
-      page = 1;
-    }
+  async getRepos(username) {
+    const url = `https://api.github.com/users/${username}/repos`;
+    const data = await fetch_all_pages(url);
 
-    const result = await fetch(
-      ` https://api.github.com/users/${username}/repos?page=${page}`
-    );
-
-    return await result.json();
+    return data;
   },
 };
